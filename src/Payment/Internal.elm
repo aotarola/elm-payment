@@ -113,6 +113,17 @@ cards =
     }
   ]
 
+find : (a -> Bool) -> List a -> Maybe a
+find fn list =
+  case List.head list of
+    Just x ->
+      if fn x == True then
+        Just x
+      else
+        find fn (Maybe.withDefault [] (List.tail list))
+    _ ->
+      Nothing
+
 matchPattern : String -> Int -> Bool
 matchPattern num pattern =
   let
@@ -124,22 +135,15 @@ matchPattern num pattern =
 
 matchCard : String -> Card -> Bool
 matchCard num card =
-  let
-    foundPattern = card.patterns
-                |> List.filter (matchPattern num)
-                |> List.head
-  in
-    case foundPattern of
-      Just pattern ->
-        True
-      Nothing ->
-        False
+  case (find (matchPattern num) card.patterns) of
+    Just pattern ->
+      True
+    Nothing ->
+      False
 
 cardFromNumber : String -> Maybe Card
 cardFromNumber num =
-  cards
-    |> List.filter (matchCard num)
-    |> List.head
+  find (matchCard num) cards
 
 sumStrDigits : String -> Int -> Int
 sumStrDigits digit acc =
