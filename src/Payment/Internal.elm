@@ -117,7 +117,7 @@ find : (a -> Bool) -> List a -> Maybe a
 find fn list =
   case List.head list of
     Just x ->
-      if fn x == True then
+      if fn x then
         Just x
       else
         find fn (Maybe.withDefault [] (List.tail list))
