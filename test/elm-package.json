@@ -1,6 +1,6 @@
 {
     "version": "1.0.0",
-    "summary": "Elm port of Jquery.payment",
+    "summary": "Elm port of JQuery.payment",
     "repository": "https://github.com/aotarola/elm-payment.git",
     "license": "MIT",
     "source-directories": [
