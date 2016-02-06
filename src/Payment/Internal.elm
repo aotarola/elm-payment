@@ -164,7 +164,7 @@ luhnCheck num =
           pair
             |> List.reverse
             |> List.head
-            |> Maybe.withDefault -1
+            |> Maybe.withDefault 0
             |> (\x -> x * 2 - ( if x >= 5 then 9 else 0))
         else
           0
