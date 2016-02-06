@@ -115,14 +115,14 @@ cards =
 
 find : (a -> Bool) -> List a -> Maybe a
 find fn list =
-  case List.head list of
-    Just x ->
-      if fn x then
-        Just x
-      else
-        find fn (Maybe.withDefault [] (List.tail list))
-    _ ->
+  case list of
+    [] ->
       Nothing
+    first::rest ->
+      if fn first then
+        Just first
+      else
+        find fn rest
 
 grouped : Int -> List a -> List (List a)
 grouped k xs =
