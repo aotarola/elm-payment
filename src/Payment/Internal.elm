@@ -124,6 +124,16 @@ find fn list =
     _ ->
       Nothing
 
+grouped : Int -> List a -> List (List a)
+grouped k xs =
+  let
+    len = List.length xs
+  in
+    if len > k then
+      List.take k xs :: grouped k (List.drop k xs)
+    else
+      [xs]
+
 matchPattern : String -> Int -> Bool
 matchPattern num pattern =
   let
@@ -145,46 +155,25 @@ cardFromNumber : String -> Maybe Card
 cardFromNumber num =
   find (matchCard num) cards
 
-sumStrDigits : String -> Int -> Int
-sumStrDigits digit acc =
-   acc + (Result.withDefault 0 (String.toInt digit))
-
-doubleAndSum : (Int, String) -> String
-doubleAndSum (position, digit) =
-  let
-    number = Result.withDefault 0 (String.toInt digit)
-
-    maybeDoubled =
-      if position % 2 == 0 then
-        number * 2
-      else
-        number
-
-    prodSum =
-        if maybeDoubled > 9 then
-          maybeDoubled
-            |> toString
-            |> String.split ""
-            |> List.foldl sumStrDigits 0
-        else
-          maybeDoubled
-  in
-    toString prodSum
-
 luhnCheck : String -> Bool
 luhnCheck num =
   let
-    checkDigit = String.right 1 num
-    lastDigit = num
-            |> String.dropRight 1
-            |> String.split ""
+    doubler pair =
+      Maybe.withDefault 0 (List.head pair) + (
+        if List.length pair > 1 then
+          pair
             |> List.reverse
-            |> List.indexedMap (,)
-            |> List.map doubleAndSum
-            |> List.foldl sumStrDigits 0
-            |> (\x -> x * 9)
-            |> toString
-            |> String.right 1
-
+            |> List.head
+            |> Maybe.withDefault -1
+            |> (\x -> x * 2 - ( if x >= 5 then 9 else 0))
+        else
+          0
+      )
   in
-    lastDigit == checkDigit
+    num
+      |> String.reverse
+      |> String.split ""
+      |> List.map (\a -> Result.withDefault 0 (String.toInt a))
+      |> grouped 2
+      |> List.foldl (\b acc -> acc + doubler b) 0
+      |> (\x -> if x % 10 == 0 then True else False)
