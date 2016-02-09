@@ -7,10 +7,10 @@ import Payment.Internal exposing (..)
 validateCardNumber : String -> Bool
 validateCardNumber num =
   let
-    numNoWhitespaces = stripWhitespaces num
+    num' = stripWhitespaces num
   in
-    case (cardFromNumber numNoWhitespaces) of
+    case (cardFromNumber num') of
       Just card ->
-        not card.luhn || luhnCheck numNoWhitespaces
+        not card.luhn || luhnCheck num'
       Nothing ->
         False
