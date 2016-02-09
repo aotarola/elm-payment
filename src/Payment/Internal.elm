@@ -145,7 +145,7 @@ matchPattern num pattern =
 
 matchCard : String -> Card -> Bool
 matchCard num card =
-  case (find (matchPattern num) card.patterns) of
+  case find (matchPattern num) card.patterns of
     Just pattern ->
       True
     Nothing ->
