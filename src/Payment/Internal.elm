@@ -151,11 +151,11 @@ matchCard num card =
     Nothing ->
       False
 
-cardFromNumber : String -> Maybe Card
+cardFromNumber : Int -> Maybe Card
 cardFromNumber num =
-  find (matchCard num) cards
+  find (matchCard (toString num)) cards
 
-luhnCheck : String -> Bool
+luhnCheck : Int -> Bool
 luhnCheck num =
   let
     doubler pair =
@@ -171,6 +171,7 @@ luhnCheck num =
       )
   in
     num
+      |> toString
       |> String.reverse
       |> String.split ""
       |> List.map (\a -> Result.withDefault 0 (String.toInt a))

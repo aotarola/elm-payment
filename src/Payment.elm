@@ -4,13 +4,10 @@ module Payment
 
 import Payment.Internal exposing (..)
 
-validateCardNumber : String -> Bool
+validateCardNumber : Int -> Bool
 validateCardNumber num =
-  let
-    num' = stripWhitespaces num
-  in
-    case (cardFromNumber num') of
-      Just card ->
-        not card.luhn || luhnCheck num'
-      Nothing ->
-        False
+  case (cardFromNumber num) of
+    Just card ->
+      not card.luhn || luhnCheck num
+    Nothing ->
+      False
