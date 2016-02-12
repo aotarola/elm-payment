@@ -121,6 +121,10 @@ find fn list =
       else
         find fn rest
 
+cardFromCardType: String -> Maybe Card
+cardFromCardType cardType =
+  find (\card -> card.cardType == cardType) cards
+
 grouped : Int -> List a -> List (List a)
 grouped k xs =
   let

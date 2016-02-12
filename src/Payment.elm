@@ -1,8 +1,11 @@
 module Payment
   ( validateCardNumber
+  , validateCardCVC
   ) where
 
 import Payment.Internal exposing (..)
+import String
+import Maybe exposing (andThen)
 
 validateCardNumber : Int -> Bool
 validateCardNumber num =
@@ -11,3 +14,14 @@ validateCardNumber num =
       not card.luhn || luhnCheck num
     Nothing ->
       False
+
+validateCardCVC : Int -> Maybe String -> Bool
+validateCardCVC cvc cardType =
+  let
+    cvcLength = cvc |> toString |> String.length
+  in
+    case cardType `andThen` cardFromCardType of
+      Just card ->
+        List.member cvcLength card.cvcLength
+      Nothing ->
+        cvcLength >= 3 && cvcLength <= 4
