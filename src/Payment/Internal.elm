@@ -6,9 +6,6 @@ import String
 defaultFormat : Regex.Regex
 defaultFormat = Regex.regex "/(\\d{1,4})/g"
 
-stripWhitespaces : String -> String
-stripWhitespaces = Regex.replace Regex.All (Regex.regex "\\s+") (\_ -> "")
-
 type alias Card =
     { cardType : String
     , patterns : List Int
