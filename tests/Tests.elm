@@ -1,8 +1,11 @@
 module Tests where
 
-import Payment exposing (validateCardNumber, validateCardCVC)
+import Payment exposing ( validateCardNumber
+                        , validateCardCVC
+                        , validateCardExpiry
+                        )
 import ElmTest exposing (..)
-
+import Date
 
 validateCardNumberSuite : Test
 validateCardNumberSuite =
@@ -27,6 +30,21 @@ validateCardCVCSuite =
     , test "Discover" (assert (validateCardCVC 123 (Just "discover")))
     ]
 
+validateCardExpirySuite : Test
+validateCardExpirySuite =
+  let
+    -- February 13, 2016
+    currentDate = Date.fromTime 1455416393417.0
+    -- March 10, 2016
+    validDate = Date.fromTime 1457568000000.0
+    -- February 1, 2016
+    expiredDate = Date.fromTime 1454284800000.0
+  in
+    suite
+      "validateCardExpiry example tests"
+      [ test "Should pass for 3 / 2016" (assert (validateCardExpiry validDate currentDate))
+      , test "Should fail for 1 / 2016" (assertEqual False (validateCardExpiry expiredDate currentDate))
+      ]
 
 all : Test
 all =
@@ -34,4 +52,5 @@ all =
     "Payment test suite"
     [ validateCardNumberSuite
     , validateCardCVCSuite
+    , validateCardExpirySuite
     ]

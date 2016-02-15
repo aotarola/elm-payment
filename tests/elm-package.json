@@ -10,6 +10,7 @@
     "exposed-modules": [],
     "dependencies": {
         "elm-lang/core": "3.0.0 <= v < 4.0.0",
+        "rluiten/elm-date-extra": "2.1.0 <= v < 3.0.0",
         "maxsnew/lazy": "1.0.1 <= v < 2.0.0",
         "deadfoxygrandpa/elm-test": "3.0.1 <= v < 4.0.0",
         "laszlopandy/elm-console": "1.0.3 <= v < 2.0.0"
