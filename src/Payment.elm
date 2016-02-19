@@ -2,6 +2,7 @@ module Payment
   ( validateCardNumber
   , validateCardCVC
   , validateCardExpiry
+  , formatCardNumber
   ) where
 
 import Payment.Internal exposing  (..)
@@ -10,6 +11,25 @@ import Maybe exposing (andThen)
 import Date exposing (Date)
 import Date.Compare as DateCompare exposing (Compare2 (..))
 import Date.Core as DateCore
+import Regex exposing(HowMany(All))
+
+formatCardNumber : Int -> String
+formatCardNumber num =
+  let
+    num' = toString num
+  in
+    case cardFromNumber(num) of
+      Just card ->
+        case List.head (Regex.find All card.format num') of
+          Just match ->
+            match.submatches
+              |> List.map (\submatch -> Maybe.withDefault "" submatch)
+              |> String.join " "
+              |> String.trim
+          Nothing ->
+            num'
+      Nothing ->
+        num'
 
 validateCardNumber : Int -> Bool
 validateCardNumber num =

@@ -4,7 +4,7 @@ import Regex
 import String
 
 defaultFormat : Regex.Regex
-defaultFormat = Regex.regex "/(\\d{1,4})/g"
+defaultFormat = Regex.regex "(\\d{1,4})(\\d{1,4})?(\\d{1,4})?(\\d{1,4})?"
 
 type alias Card =
     { cardType : String
@@ -71,7 +71,7 @@ cards =
     },
     { cardType = "amex"
     , patterns = [34, 37]
-    , format = Regex.regex "/(\\d{1,4})(\\d{1,6})?(\\d{1,5})?/"
+    , format = Regex.regex "(\\d{1,4})(\\d{1,6})?(\\d{1,5})?"
     , length = [15]
     , cvcLength = [3..4]
     , luhn = True
@@ -80,7 +80,7 @@ cards =
     , patterns = [
         30, 36, 38, 39
       ]
-    , format = Regex.regex "/(\\d{1,4})(\\d{1,6})?(\\d{1,4})?/g"
+    , format = Regex.regex "(\\d{1,4})(\\d{1,6})?(\\d{1,4})?"
     , length = [14]
     , cvcLength = [3]
     , luhn = True
