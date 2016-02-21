@@ -6,7 +6,7 @@ import String
 defaultFormat : Regex.Regex
 defaultFormat = Regex.regex "(\\d{1,4})(\\d{1,4})?(\\d{1,4})?(\\d{1,4})?"
 
-type alias Card =
+type alias CardType =
     { cardType : String
     , patterns : List Int
     , length : List Int
@@ -15,7 +15,7 @@ type alias Card =
     , luhn : Bool
     }
 
-cards : List Card
+cards : List CardType
 cards =
   [
     --DEBIT CARDS
@@ -121,7 +121,7 @@ find fn list =
       else
         find fn rest
 
-cardFromCardType: String -> Maybe Card
+cardFromCardType: String -> Maybe CardType
 cardFromCardType cardType =
   find (\card -> card.cardType == cardType) cards
 
@@ -144,19 +144,19 @@ matchPattern num pattern =
   in
     slicedNum == stringPattern
 
-matchCard : String -> Card -> Bool
-matchCard num card =
+matchCardType : String -> CardType -> Bool
+matchCardType num card =
   case find (matchPattern num) card.patterns of
     Just pattern ->
       True
     Nothing ->
       False
 
-cardFromNumber : Int -> Maybe Card
+cardFromNumber : String -> Maybe CardType
 cardFromNumber num =
-  find (matchCard (toString num)) cards
+  find (matchCardType num) cards
 
-luhnCheck : Int -> Bool
+luhnCheck : String -> Bool
 luhnCheck num =
   let
     doubler pair =
@@ -172,7 +172,6 @@ luhnCheck num =
       )
   in
     num
-      |> toString
       |> String.reverse
       |> String.split ""
       |> List.map (\a -> Result.withDefault 0 (String.toInt a))
