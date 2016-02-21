@@ -19,6 +19,7 @@ validateCardNumberSuite =
     , test "Diners Club" (assert (validateCardNumber "30204415359894"))
     , test "Discover" (assert (validateCardNumber "6011539859023682"))
     , test "Master Card" (assert (validateCardNumber "5198181454082826"))
+    , test "Emtpy string" (assertEqual False (validateCardNumber ""))
     ]
 
 validateCardCVCSuite : Test
@@ -33,6 +34,7 @@ validateCardCVCSuite =
     , test "Any" (assertEqual False (validateCardCVC "53413" Nothing))
     , test "Visa" (assert (validateCardCVC "537" (Just "visa")))
     , test "Discover" (assert (validateCardCVC "123" (Just "discover")))
+    , test "Empty String" (assertEqual False (validateCardCVC "" Nothing))
     ]
 
 validateCardExpirySuite : Test
