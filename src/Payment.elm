@@ -12,8 +12,11 @@ import Regex exposing (HowMany(All))
 formatCardNumber : String -> Maybe String
 formatCardNumber num =
   let
+    num' =
+      stripWhitespaces num
+
     format card =
-      case List.head (Regex.find All card.format num) of
+      case List.head (Regex.find All card.format num') of
         Just match ->
           match.submatches
             |> List.map (\submatch -> Maybe.withDefault "" submatch)
@@ -24,32 +27,42 @@ formatCardNumber num =
         Nothing ->
           Nothing
   in
-    cardFromNumber num
+    cardFromNumber num'
       |> (flip andThen) format
 
 
 validateCardNumber : String -> Bool
 validateCardNumber num =
-  case cardFromNumber num of
-    Just card ->
-      not card.luhn || luhnCheck num
+  let
+    num' =
+      stripWhitespaces num
+  in
+    case cardFromNumber num' of
+      Just card ->
+        not card.luhn || luhnCheck num'
 
-    Nothing ->
-      False
+      Nothing ->
+        False
 
 
 validateCardCVC : String -> Maybe String -> Bool
 validateCardCVC cvc cardType =
   let
+    cvc' = stripWhitespaces cvc
     cvcLength =
-      String.length cvc
+      String.length cvc'
   in
-    case cardType `andThen` cardFromCardType of
-      Just card ->
-        List.member cvcLength card.cvcLength
+    case String.toInt cvc' of
+      Ok _ ->
+        case cardType `andThen` cardFromCardType of
+          Just card ->
+            List.member cvcLength card.cvcLength
 
-      Nothing ->
-        cvcLength >= 3 && cvcLength <= 4
+          Nothing ->
+            cvcLength >= 3 && cvcLength <= 4
+
+      Err _ ->
+        False
 
 
 validateCardExpiry : Date -> Date -> Bool

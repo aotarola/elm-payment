@@ -3,6 +3,10 @@ module Payment.Internal where
 import Regex
 import String
 
+stripWhitespaces : String -> String
+stripWhitespaces =
+  Regex.replace Regex.All (Regex.regex "\\s+") (\_ -> "")
+
 defaultFormat : Regex.Regex
 defaultFormat = Regex.regex "(\\d{1,4})(\\d{1,4})?(\\d{1,4})?(\\d{1,4})?"
 
