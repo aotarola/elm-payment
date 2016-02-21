@@ -48,7 +48,9 @@ validateCardNumber num =
 validateCardCVC : String -> Maybe String -> Bool
 validateCardCVC cvc cardType =
   let
-    cvc' = stripWhitespaces cvc
+    cvc' =
+      stripWhitespaces cvc
+
     cvcLength =
       String.length cvc'
   in
