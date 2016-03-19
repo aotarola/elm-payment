@@ -4,6 +4,7 @@ import Payment.Types exposing (CardType(..))
 import Regex
 import String
 
+
 type alias CardSpec =
   { cardType : CardType
   , patterns : List Int
@@ -12,6 +13,7 @@ type alias CardSpec =
   , format : Regex.Regex
   , luhnCheck : Bool
   }
+
 
 cardsSpec : List CardSpec
 cardsSpec =
