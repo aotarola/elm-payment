@@ -7,8 +7,27 @@ import Maybe exposing (andThen)
 import Date exposing (Date)
 import Date.Compare as DateCompare exposing (Compare2(..))
 import Date.Core as DateCore
-
 import Regex exposing (HowMany(All))
+
+
+formatCardExpiry : Card -> Card
+formatCardExpiry card =
+  let
+    expiryFormat =
+      Regex.regex "(\\d{1,2})[^\\d]*(\\d{1,4})?"
+
+    format submatches =
+      String.join " / " (List.map (\x -> Maybe.withDefault "" x) submatches)
+  in
+    case List.head (Regex.find All expiryFormat card.expires) of
+      Just match ->
+        { card
+          | expires =
+              format match.submatches
+        }
+
+      Nothing ->
+        card
 
 
 formatCardNumber : Card -> Card

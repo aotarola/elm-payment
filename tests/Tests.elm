@@ -102,7 +102,6 @@ validateCardCVCSuite =
 validateCardExpirySuite : Test
 validateCardExpirySuite =
   let
-    -- February 13, 2016
     currentDate =
       DateUtils.unsafeFromString "Aug 1, 2015"
 
@@ -158,6 +157,25 @@ formatCardNumberSuite =
       , test "Bad credit card (numbers and letters)" (assertEqual "1233a9" (formatCardNumber invalidCard2).number)
       ]
 
+formatCardExpirySuite : Test
+formatCardExpirySuite =
+  let
+    validCardFormat1 =
+      { emptyCard | expires = "012016" }
+
+    validCardFormat2 =
+      { emptyCard | expires = "1216" }
+
+    invalidCardFormat1 =
+      { emptyCard | expires = "wrong" }
+  in
+    suite
+      "formatCardExpiry tests"
+      [ test "Proper format (style 1)" (assertEqual "01 / 2016" (formatCardExpiry validCardFormat1).expires)
+      , test "Proper format (style 2)" (assertEqual "12 / 16" (formatCardExpiry validCardFormat2).expires)
+      , test "Invalid format (silent fail, value unchanged)" (assertEqual "wrong" (formatCardExpiry invalidCardFormat1).expires)
+      ]
+
 
 all : Test
 all =
@@ -167,4 +185,5 @@ all =
     , validateCardCVCSuite
     , validateCardExpirySuite
     , formatCardNumberSuite
+    , formatCardExpirySuite
     ]
