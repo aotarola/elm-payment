@@ -80,17 +80,21 @@ validateCardCVC card =
       Err _ ->
         False
 
+
 validateCardExpiry : Card -> Date -> Bool
 validateCardExpiry card currentDate =
   let
-    expiresStr = case String.split "/" card.expires of
-        month::year ->
+    expiresStr =
+      case String.split "/" card.expires of
+        month :: year ->
           month ++ "/01/" ++ Maybe.withDefault "" (List.head year)
+
         [] ->
           ""
   in
     case Date.fromString expiresStr of
       Ok expires ->
         DateCompare.is After (DateCore.firstOfNextMonthDate expires) currentDate
+
       Err _ ->
         False
